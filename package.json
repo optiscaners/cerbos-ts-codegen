@@ -1,5 +1,5 @@
 {
-	"name": "@estino/cerbos-ts-codegen",
+	"name": "cerbos-ts-codegen-test",
 	"version": "0.0.1",
 	"description": "",
 	"type": "module",
@@ -7,6 +7,9 @@
 	"files": [
 		"dist"
 	],
+	"bin": {
+		"cerbos-ts-codegen-test": "dist/index.js"
+	},
 	"scripts": {
 		"build": "tsc",
 		"dev": "node --watch --loader ts-node/esm --experimental-specifier-resolution=node src/dev.ts",

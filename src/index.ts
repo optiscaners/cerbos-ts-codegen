@@ -1,8 +1,8 @@
-import { Separator, input, select } from "@inquirer/prompts"
+import { input, select } from "@inquirer/prompts"
 import transform from "./transform.js"
 
 const locationType = await select<"local" | "admin-api">({
-	message: "Where are your schemas and resource policies located",
+	message: "Where are your schemas and resource policies located?",
 	choices: [
 		{
 			name: "locally",

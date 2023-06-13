@@ -6,7 +6,7 @@ import path from "path"
 import { Project } from "ts-morph"
 import { fileURLToPath } from "url"
 import { z } from "zod"
-import { findFiles, notEmpty, uniqueArray } from "./util.js"
+import { findFiles, notEmpty, resolvePath, uniqueArray } from "./util.js"
 import { format } from "prettier"
 
 export default async function transform(
@@ -15,16 +15,13 @@ export default async function transform(
 ) {
 	const project = new Project({})
 
-	const __filename = fileURLToPath(import.meta.url)
-	const __dirname = path.dirname(__filename)
-
-	const yamlFiles = findFiles(path.join(__dirname, resourceFolderPath), [
+	const yamlFiles = findFiles(resolvePath(resourceFolderPath), [
 		".yaml",
 		".yml",
 	])
 
 	const schemaFiles = findFiles(
-		path.join(__dirname, resourceFolderPath, "/_schemas"),
+		path.join(resolvePath(resourceFolderPath), "/_schemas"),
 		[".json"]
 	)
 
@@ -42,11 +39,9 @@ export default async function transform(
 		}),
 	})
 
-	const sourceFile = project.createSourceFile(
-		path.join(__dirname, destination),
-		"",
-		{ overwrite: true }
-	)
+	const sourceFile = project.createSourceFile(resolvePath(destination), "", {
+		overwrite: true,
+	})
 
 	sourceFile.addImportDeclaration({
 		moduleSpecifier: "@cerbos/core/lib/types/external",

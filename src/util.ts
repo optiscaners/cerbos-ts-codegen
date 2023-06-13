@@ -32,3 +32,11 @@ export function findFiles(
 
 	return fileList
 }
+
+export function resolvePath(inputPath: string) {
+	if (path.isAbsolute(inputPath)) {
+		return inputPath
+	} else {
+		return path.resolve(process.cwd(), inputPath)
+	}
+}
