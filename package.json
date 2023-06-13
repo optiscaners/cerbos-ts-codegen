@@ -1,6 +1,6 @@
 {
-	"name": "cerbos-ts-codegen-test",
-	"version": "0.0.3",
+	"name": "@estino/cerbos-ts-codegen",
+	"version": "0.0.1",
 	"description": "",
 	"type": "module",
 	"main": "dist/index.js",
@@ -8,7 +8,7 @@
 		"dist"
 	],
 	"bin": {
-		"cerbos-ts-codegen-test": "dist/index.js"
+		"@estino/cerbos-ts-codegen": "dist/index.js"
 	},
 	"scripts": {
 		"build": "tsc",
