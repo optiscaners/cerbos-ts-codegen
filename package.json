@@ -1,7 +1,15 @@
 {
 	"name": "@estino/cerbos-ts-codegen",
-	"version": "0.0.1",
-	"description": "",
+	"version": "0.0.2",
+	"description": "codegen for cerbos policy schemas",
+	"keywords": [
+		"cerbos",
+		"authorization",
+		"codegen",
+		"typescript"
+	],
+	"packageManager": "pnpm@8.6.0",
+	"repository": "github:optiscaners/cerbos-ts-codegen",
 	"type": "module",
 	"main": "dist/index.js",
 	"files": [
@@ -19,9 +27,9 @@
 		"dev:prompt": "node --watch --loader ts-node/esm --experimental-specifier-resolution=node src/index.ts",
 		"format": "prettier --write ."
 	},
-	"keywords": [],
 	"author": "Manuel Dugué",
-	"license": "ISC",
+	"license": "MIT",
+	"homepage": "https://www.estino.de/",
 	"dependencies": {
 		"@cerbos/core": "^0.11.0",
 		"@cerbos/http": "^0.12.0",
