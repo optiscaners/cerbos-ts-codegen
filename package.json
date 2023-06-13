@@ -9,7 +9,7 @@
 	],
 	"scripts": {
 		"build": "tsc",
-		"dev": "node --watch --loader ts-node/esm --experimental-specifier-resolution=node src/transform.ts",
+		"dev": "node --watch --loader ts-node/esm --experimental-specifier-resolution=node src/dev.ts",
 		"dev:prompt": "node --watch --loader ts-node/esm --experimental-specifier-resolution=node src/index.ts",
 		"format": "prettier --write ."
 	},
@@ -20,7 +20,7 @@
 		"@cerbos/core": "^0.11.0",
 		"@cerbos/http": "^0.12.0",
 		"@inquirer/prompts": "^2.1.1",
-		"@types/node": "^20.3.0",
+		"@types/node": "^20.3.1",
 		"camelcase": "^7.0.1",
 		"js-yaml": "^4.1.0",
 		"json-schema-to-typescript": "^13.0.2",
