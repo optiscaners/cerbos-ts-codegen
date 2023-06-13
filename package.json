@@ -10,6 +10,9 @@
 	"bin": {
 		"@estino/cerbos-ts-codegen": "dist/index.js"
 	},
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"build": "tsc",
 		"dev": "node --watch --loader ts-node/esm --experimental-specifier-resolution=node src/dev.ts",
