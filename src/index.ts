@@ -1,7 +1,7 @@
 import { input, select } from "@inquirer/prompts"
 import transform from "./transform.js"
 
-const locationType = await select<"local" | "admin-api">({
+await select<"local" | "admin-api">({
 	message: "Where are your schemas and resource policies located?",
 	choices: [
 		{
@@ -20,12 +20,12 @@ const locationType = await select<"local" | "admin-api">({
 
 const resourceFolderPath = await input({
 	message: "Enter the path",
-	default: "../example",
+	default: "./example",
 })
 
 const destination = await input({
 	message: "Where should the generated files be saved?",
-	default: "../types/cerbos.d.ts",
+	default: "./types/cerbos.d.ts",
 })
 
 await transform(resourceFolderPath, destination)

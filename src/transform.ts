@@ -1,13 +1,13 @@
+import chalk from "chalk"
 import fs from "fs"
 import yaml from "js-yaml"
 import { compileFromFile } from "json-schema-to-typescript"
 import { generateName } from "json-schema-to-typescript/dist/src/utils.js"
 import path from "path"
+import { format } from "prettier"
 import { Project } from "ts-morph"
-import { fileURLToPath } from "url"
 import { z } from "zod"
 import { findFiles, notEmpty, resolvePath, uniqueArray } from "./util.js"
-import { format } from "prettier"
 
 export default async function transform(
 	resourceFolderPath: string,
@@ -15,12 +15,12 @@ export default async function transform(
 ) {
 	const project = new Project({})
 
-	const yamlFiles = findFiles(resolvePath(resourceFolderPath), [
+	const yamlFiles = await findFiles(resolvePath(resourceFolderPath), [
 		".yaml",
 		".yml",
 	])
 
-	const schemaFiles = findFiles(
+	const schemaFiles = await findFiles(
 		path.join(resolvePath(resourceFolderPath), "/_schemas"),
 		[".json"]
 	)
@@ -125,7 +125,9 @@ export default async function transform(
 		returnType: "Promise<boolean>",
 	})
 
-	console.log("created File: ", sourceFile.getFilePath())
+	console.log(
+		"\nCreated File: \n" + chalk.bold(sourceFile.getFilePath()) + "\n"
+	)
 
 	sourceFile.replaceWithText(
 		format(sourceFile.getText(), {
