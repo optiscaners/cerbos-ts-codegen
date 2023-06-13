@@ -8,11 +8,26 @@ export const cerbos = new HTTP(process.env.NEXT_PUBLIC_CERBOS_ENDPOINT || "");
 cerbos.isAllowed({
 	action: "read",
 	principal: { id: "123", roles: [""] },
-	resource: { kind: "business_partner", id: "foo" },
+	resource: { kind: "business_partner", id: "foo", attributes: { foo: "bar" } },
 });
 
 cerbos.isAllowed({
 	action: "show",
 	principal: { id: "123", roles: [""], attributes: { department: "legal" } },
-	resource: { kind: "vdp_menu", id: "foo" },
+	resource: { kind: "vdp_menu", id: "foo", attributes: { foo: "bar" } },
+});
+
+cerbos.isAllowed({
+	action: "read",
+	principal: {
+		id: "123",
+		roles: [""],
+		attributes: {
+			department: "legal",
+			businessPartners: {
+				foo: { role: "owner", custom_attributes: { all: true } },
+			},
+		},
+	},
+	resource: { kind: "fleet", id: "foo", attributes: { businessPartner: "foo" } },
 });

@@ -9,7 +9,7 @@ import { z } from "zod";
 import { findFiles, notEmpty, uniqueArray } from "./util.js";
 
 export default async function transform(
-	resourceFolderPath: string = "../assets",
+	resourceFolderPath: string,
 	destination: string
 ) {
 	const project = new Project({});
@@ -81,14 +81,11 @@ export default async function transform(
 				yaml.load(fs.readFileSync(filePath, "utf8"))
 			);
 
-			// TODO
-			if (parsed.resourcePolicy.schemas == null) return;
-
 			const locallyAllowedParamsType = cerbosModule.addTypeAlias({
 				name: "isAllowedParams" + fileName,
 				type: `{
-      principal: Principal ${
-							parsed.resourcePolicy.schemas.principalSchema != null
+      principal: Principal${
+							parsed.resourcePolicy.schemas?.principalSchema != null
 								? ` & {
         attributes?: ${generateName(
 									path.parse(parsed.resourcePolicy.schemas.principalSchema?.ref).name,
@@ -97,7 +94,14 @@ export default async function transform(
       }`
 								: ""
 						}
-      resource: { kind: "${parsed.resourcePolicy.resource}" }
+      resource: { kind: "${parsed.resourcePolicy.resource}"${
+					parsed.resourcePolicy.schemas?.resourceSchema != null
+						? `, attributes: ${generateName(
+								path.parse(parsed.resourcePolicy.schemas.resourceSchema.ref).name,
+								new Set()
+						  )}`
+						: ""
+				} }
       action: ${uniqueArray(
 							parsed.resourcePolicy.rules.flatMap((rule) =>
 								rule.actions.map((action) => `"${action}"`)

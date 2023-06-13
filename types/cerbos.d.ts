@@ -68,8 +68,18 @@ declare module "@cerbos/http" {
 		principal: Principal & {
 			attributes?: BusinessPartner;
 		};
-		resource: { kind: "fleet" };
+		resource: { kind: "fleet"; attributes: Fleet };
 		action: "read" | "update" | "*" | "create" | "delete";
+	};
+	type isAllowedParamsFleetAttribute = {
+		principal: Principal;
+		resource: { kind: "fleet_attribute" };
+		action: "read" | "*";
+	};
+	type isAllowedParamsSignalPrivacy = {
+		principal: Principal;
+		resource: { kind: "signal:privacy" };
+		action: "read" | "update";
 	};
 	type isAllowedParamsUiMenu = {
 		principal: Principal & {
@@ -82,20 +92,22 @@ declare module "@cerbos/http" {
 		principal: Principal & {
 			attributes?: BusinessPartner;
 		};
-		resource: { kind: "vdp_check" };
+		resource: { kind: "vdp_check"; attributes: VdpCheck };
 		action: "*" | "create" | "read" | "deny" | "approve";
 	};
 	type isAllowedParamsVehicle = {
 		principal: Principal & {
 			attributes?: BusinessPartner;
 		};
-		resource: { kind: "vehicle" };
+		resource: { kind: "vehicle"; attributes: Fleet };
 		action: "read:*" | "update" | "create" | "read:vin" | "delete";
 	};
 	type isAllowedParams = IsAllowedRequest &
 		(
 			| isAllowedParamsBusinessPartner
 			| isAllowedParamsFleet
+			| isAllowedParamsFleetAttribute
+			| isAllowedParamsSignalPrivacy
 			| isAllowedParamsUiMenu
 			| isAllowedParamsVdpCheck
 			| isAllowedParamsVehicle
