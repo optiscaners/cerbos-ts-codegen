@@ -1,0 +1,22 @@
+apiVersion: api.cerbos.dev/v1
+resourcePolicy:
+  version: default
+  resource: vdp_menu
+  rules:
+
+    - actions: [show]
+      effect: EFFECT_ALLOW
+      roles: [admin]
+    
+    - actions: [show]
+      effect: EFFECT_ALLOW
+      roles: [user]
+      condition:
+        match: 
+          all:
+            of:
+              - expr: P.attr.department == "legal"
+
+  schemas:
+    principalSchema:
+      ref: cerbos://schemas/principal/department.json

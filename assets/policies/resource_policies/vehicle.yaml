@@ -1,0 +1,47 @@
+apiVersion: api.cerbos.dev/v1
+variables:
+  business_partner_type: P.attr.businessPartners[R.attr.businessPartner]
+resourcePolicy:
+  version: default
+  resource: vehicle
+  rules:
+    
+    - actions: [read:*]
+      effect: EFFECT_ALLOW
+      roles: [user]
+      condition: 
+        match: 
+          expr: V.business_partner_type != null
+      
+
+    - actions: [read:*, update]
+      effect: EFFECT_ALLOW
+      roles: [user]
+      condition: 
+        match: 
+          expr: V.business_partner_type == "fleetEditor"
+
+    - actions: [create, read:*, read:vin, update, delete]
+      effect: EFFECT_ALLOW
+      roles: [admin]
+    
+    - actions: [create, read:*, read:vin, update, delete]
+      effect: EFFECT_ALLOW
+      roles: [user]
+      condition: 
+        match: 
+          expr: V.business_partner_type == "owner"
+
+    - actions: [read:vin] # TBD
+      effect: EFFECT_ALLOW
+      roles: [user]
+      condition: 
+        match: 
+          expr: V.business_partner_type == "owner"
+      
+  schemas:
+    principalSchema:
+      ref: cerbos://schemas/principal/business_partner.json
+    resourceSchema:
+      ref: cerbos://schemas/fleet.json
+      

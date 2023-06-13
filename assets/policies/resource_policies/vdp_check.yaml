@@ -1,0 +1,37 @@
+apiVersion: api.cerbos.dev/v1
+resourcePolicy:
+  version: default
+  resource: vdp_check
+  rules:
+
+    - actions: ["*"]
+      effect: EFFECT_ALLOW
+      roles: [admin]
+    
+    - actions: [create]
+      effect: EFFECT_ALLOW
+      roles: [user]  
+    
+    - actions: [read]
+      effect: EFFECT_ALLOW
+      roles: [user]
+      condition:
+        match:
+          expr: R.attr.ownerId == P.id
+    
+    - actions: [deny, approve]
+      effect: EFFECT_ALLOW
+      roles: [user]
+      condition:
+        match: 
+          all:
+            of:
+              - expr: P.attr.department == "legal"
+              - expr: P.attr.businessPartners[R.attr.businessPartner] != null
+
+  schemas:
+    principalSchema:
+      ref: cerbos://schemas/principal/business_partner.json
+    resourceSchema:
+      ref: cerbos://schemas/vdp_check.json
+      

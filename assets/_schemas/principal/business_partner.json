@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "department": { "enum": ["tech", "legal"] },
+    "businessPartners": {
+      "type": "object",
+      "patternProperties": {
+        ".": {
+          "type": "object",
+          "properties": {
+            "role": { "enum": ["owner", "member", "fleetEditor"] },
+            "custom_attributes": {
+              "type": "object",
+              "properties": {
+                "all": { "type": "boolean" },
+                "attributes": {
+                  "type": "object",
+                  "patternProperties": {
+                    ".": { "type": "array", "items": { "type": "string" } }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": ["businessPartners", "department"]
+}

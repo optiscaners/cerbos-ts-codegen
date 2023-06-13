@@ -1,0 +1,36 @@
+apiVersion: api.cerbos.dev/v1
+variables:
+  business_partner_type: P.attr.businessPartners[R.id]
+resourcePolicy:
+  version: default
+  resource: business_partner
+  rules:
+
+    - actions: ["*"]
+      effect: EFFECT_ALLOW
+      roles: [admin]
+
+    - actions: ["*"]  
+      effect: EFFECT_ALLOW
+      roles: [user]
+      condition: 
+        match: 
+          expr: V.business_partner_type == "owner"
+
+    - actions: [read]
+      effect: EFFECT_ALLOW
+      roles: [user]
+      condition: 
+        match: 
+          expr: V.business_partner_type != null
+
+    - actions: [update] # adding a fleet would be just an update of the BP for now
+      effect: EFFECT_ALLOW
+      roles: [user]
+      condition: 
+        match: 
+          expr: V.business_partner_type == "fleetEditor"
+
+  schemas:
+    principalSchema:
+      ref: cerbos://schemas/principal/business_partner.json

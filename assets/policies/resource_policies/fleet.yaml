@@ -1,0 +1,52 @@
+apiVersion: api.cerbos.dev/v1
+variables:
+  business_partner: P.attr.businessPartners[R.attr.businessPartner]
+resourcePolicy:
+  version: default
+  resource: fleet
+  rules:
+    
+    - actions: [read]
+      effect: EFFECT_ALLOW
+      roles: [user]
+      condition: 
+        match: 
+          any:
+            of:
+              - expr: V.business_partner.role == "owner"
+              - expr: P.id in R.attr.owner
+              - expr: V.business_partner.custom_attributes.all 
+              - all:
+                  of:
+                    - expr: V.business_partner != null
+                    # TBD: AND vs OR for custom attributes array
+                    - expr: > 
+                        V.business_partner.custom_attributes.exists(ra, 
+                          ra in R.attr.custom_attributes && 
+                          hasIntersection(V.business_partner.custom_attributes[ra], R.attr.custom_attributes[ra])
+                        )
+
+    - actions: [read, update]
+      effect: EFFECT_ALLOW
+      roles: [user]
+      condition: 
+        match: 
+          expr: V.business_partner.role == "fleetEditor"
+
+    - actions: ["*"]
+      effect: EFFECT_ALLOW
+      roles: [admin]
+    
+    - actions: [create, read, update, delete]
+      effect: EFFECT_ALLOW
+      roles: [user]
+      condition: 
+        match: 
+          expr: V.business_partner.role == "owner"
+
+  schemas:
+    principalSchema:
+      ref: cerbos://schemas/principal/business_partner.json
+    resourceSchema:
+      ref: cerbos://schemas/fleet.json
+      
