@@ -23,6 +23,7 @@ npx @estino/cerbos-ts-codegen
 - fetching schemas and policies from the Admin API is not yet supported, though the CLI already hints at it
 - only the `isAllowed` method of `@cerbos/http` is supported right now
 - `derived roles` are not supported as we don't use them currently
+- opting out of schemas via `ignoreWhen` is not supported as we don't use it currently
 - I am not sure yet what will happen in more advanced use cases, as we haven't used them yet. Such as using `common schema fragments`, schema titles etc.
 
 ## Example
