@@ -23,6 +23,7 @@ npx @estino/cerbos-ts-codegen
 - fetching schemas and policies from the Admin API is not yet supported, though the CLI already hints at it
 - only the `isAllowed` method of `@cerbos/http` is supported right now
 - `derived roles` are not supported as we don't use them currently
+- I am not sure yet what will happen in more advanced use cases, as we haven't used them yet. Such as using `common schema fragments`, schema titles etc.
 
 ## Example
 
@@ -56,13 +57,13 @@ resourcePolicy:
 
   schemas:
     principalSchema:
-      ref: cerbos://schemas/principal.json
+      ref: cerbos://schemas/contract-principal.json
     resourceSchema:
       ref: cerbos://schemas/contract.json
 ```
 
 ```yaml
-# schemas/principal.json
+# schemas/contract-principal.json
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
@@ -86,3 +87,34 @@ resourcePolicy:
 ```
 
 ### Codegen Result
+
+```typescript
+import type {
+	Principal,
+	IsAllowedRequest,
+} from "@cerbos/core/lib/types/external"
+
+declare module "@cerbos/http" {
+	interface HTTP {
+		isAllowed(request: isAllowedParams): Promise<boolean>
+	}
+	export interface ContractPrincipal {
+		department: "tech" | "legal"
+		organisation: string
+		[k: string]: unknown
+	}
+	export interface Contract {
+		organisation: string
+		[k: string]: unknown
+	}
+
+	type isAllowedParamsContract = {
+		principal: Principal & {
+			attributes?: ContractPrincipal
+		}
+		resource: { kind: "contract"; attributes: Contract }
+		action: "view" | "edit"
+	}
+	type isAllowedParams = IsAllowedRequest & isAllowedParamsContract
+}
+```
