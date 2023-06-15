@@ -1,6 +1,6 @@
 {
 	"name": "@estino/cerbos-ts-codegen",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"description": "codegen for cerbos policy schemas",
 	"keywords": [
 		"cerbos",
@@ -22,10 +22,12 @@
 		"access": "public"
 	},
 	"scripts": {
-		"build": "tsc",
-		"dev": "node --watch --loader ts-node/esm --experimental-specifier-resolution=node src/dev.ts",
-		"dev:prompt": "node --watch --loader ts-node/esm --experimental-specifier-resolution=node src/index.ts",
-		"format": "prettier --write ."
+		"build": "tsup",
+		"dev:transform": "tsup src/dev.ts --watch --onSuccess 'node dist/dev.js'",
+		"dev": "tsup --watch --onSuccess 'node dist/index.js'",
+		"tsc": "tsc --noEmit",
+		"format": "prettier --write . --cache",
+		"pub:release": "pnpm build && pnpm publish --access public"
 	},
 	"author": "Manuel Dugué",
 	"license": "MIT",
@@ -46,6 +48,6 @@
 	},
 	"devDependencies": {
 		"@types/js-yaml": "^4.0.5",
-		"ts-node": "^10.9.1"
+		"tsup": "^6.7.0"
 	}
 }
