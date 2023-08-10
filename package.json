@@ -35,7 +35,7 @@
 		"@cerbos/http": "^0.12.0",
 		"@inquirer/prompts": "^2.1.1",
 		"@types/node": "^20.3.1",
-		"camelcase": "^7.0.1",
+		"camelcase": "^8.0.0",
 		"chalk": "^5.2.0",
 		"js-yaml": "^4.1.0",
 		"json-schema-to-typescript": "^13.0.2",
