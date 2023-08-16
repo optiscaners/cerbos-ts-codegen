@@ -1,4 +1,4 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
 
 settings:
   autoInstallPeers: true
@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@cerbos/core':
-    specifier: ^0.11.0
-    version: 0.11.0
+    specifier: ^0.13.0
+    version: 0.13.0
   '@cerbos/http':
     specifier: ^0.12.0
     version: 0.12.0
@@ -64,6 +64,13 @@ packages:
 
   /@cerbos/core@0.11.0:
     resolution: {integrity: sha512-z06DLZwoIqRaVUW9710i9fw5DRrD+geBz44xc/DyrZapbWFBUoFr+X3er+0bWln2adQ48MSEf+k3hWJ1t5Bs+Q==}
+    engines: {node: '>= 16'}
+    dependencies:
+      uuid: 9.0.0
+    dev: false
+
+  /@cerbos/core@0.13.0:
+    resolution: {integrity: sha512-NOIl659hPndeHo3vP3WdBOLuZW0GOwkO7e6p9ym3sN72RyYpVCGX3XH3VZEszhoj23tLtMLtq5hOZ8viAaXwcA==}
     engines: {node: '>= 16'}
     dependencies:
       uuid: 9.0.0
