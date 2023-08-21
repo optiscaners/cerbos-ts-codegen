@@ -7,7 +7,7 @@ Currently [cerbos](https://cerbos.dev/) does not provide a way to generate types
 ## Usage
 
 ```bash
-npx @estino/cerbos-ts-codegen
+npx @estino/cerbos-ts-codegen@latest
 ```
 
 ## Approach taken
