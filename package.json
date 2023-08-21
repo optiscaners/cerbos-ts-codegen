@@ -1,6 +1,6 @@
 {
 	"name": "@estino/cerbos-ts-codegen",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"description": "codegen for cerbos policy schemas",
 	"keywords": [
 		"cerbos",
