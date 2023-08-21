@@ -71,15 +71,16 @@ export default async function transform(
 	// return the result to later use it as isAllowedParams union
 	const paramsUnionEntry = await Promise.all(
 		yamlFiles.map(async (filePath) => {
-			const fileName = generateName(path.parse(filePath).name, new Set())
+			try {
+				const fileName = generateName(path.parse(filePath).name, new Set())
 
-			const parsed = yamlSchema.parse(
-				yaml.load(fs.readFileSync(filePath, "utf8"))
-			)
+				const parsed = yamlSchema.parse(
+					yaml.load(fs.readFileSync(filePath, "utf8"))
+				)
 
-			const locallyAllowedParamsType = cerbosModule.addTypeAlias({
-				name: "isAllowedParams" + fileName,
-				type: `{
+				const locallyAllowedParamsType = cerbosModule.addTypeAlias({
+					name: "isAllowedParams" + fileName,
+					type: `{
       principal: Principal${
 				parsed.resourcePolicy.schemas?.principalSchema != null
 					? ` & {
@@ -91,22 +92,25 @@ export default async function transform(
 					: ""
 			}
       resource: { kind: "${parsed.resourcePolicy.resource}"${
-					parsed.resourcePolicy.schemas?.resourceSchema != null
-						? `, attributes: ${generateName(
-								path.parse(parsed.resourcePolicy.schemas.resourceSchema.ref)
-									.name,
-								new Set()
-						  )}`
-						: ""
-				} }
+						parsed.resourcePolicy.schemas?.resourceSchema != null
+							? `, attributes: ${generateName(
+									path.parse(parsed.resourcePolicy.schemas.resourceSchema.ref)
+										.name,
+									new Set()
+							  )}`
+							: ""
+					} }
       action: ${uniqueArray(
 				parsed.resourcePolicy.rules.flatMap((rule) =>
 					rule.actions.map((action) => `"${action}"`)
 				)
 			).join(" | ")}
     }`,
-			})
-			return locallyAllowedParamsType
+				})
+				return locallyAllowedParamsType
+			} catch (e) {
+				return undefined
+			}
 		})
 	)
 
