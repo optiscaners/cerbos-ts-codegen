@@ -1,17 +1,25 @@
 apiVersion: api.cerbos.dev/v1
+
 resourcePolicy:
   version: default
-  resource: signal:privacy
-  rules:
+  resource: signal_privacy
 
+  rules:
     - actions: [read]
       effect: EFFECT_ALLOW
       roles: [user]
 
-    - actions: [read, update]
+    - actions: [update]
       effect: EFFECT_ALLOW
       roles: [user]
       condition:
-        match: 
+        match:
           expr: P.attr.department == "legal"
 
+    - actions: ["*"]
+      effect: EFFECT_ALLOW
+      roles: [admin]
+
+  schemas:
+    principalSchema:
+      ref: cerbos:///principal.json

@@ -1,0 +1,8 @@
+apiVersion: api.cerbos.dev/v1
+description: Common variables used within our app
+exportVariables:
+  name: with_fleet_resource_variables
+  definitions:
+    common_fleet_groups: R.attr.fleetGroups.filter(g, g in P.attr.fleetGroups)
+    user_role_in_fleet: P.attr.fleets[R.attr.fleet].role
+    is_owner_of_common_fleet_group: P.attr.fleetGroups.exists(g, P.attr.fleetGroups[g].role == "owner")

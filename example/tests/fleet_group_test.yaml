@@ -1,0 +1,22 @@
+name: Fleet Group test suite
+description: Tests for verifying the fleet group resource policy
+options:
+  now: "2022-08-02T15:00:00Z"
+
+tests:
+  - name: Owner can view & delete
+    input:
+      principals:
+        - tech_us_owner
+      resources:
+        - us_fleet_group
+      actions:
+        - view
+        - delete
+
+    expected:
+      - principal: tech_us_owner
+        resource: us_fleet_group
+        actions:
+          view: EFFECT_ALLOW
+          delete: EFFECT_ALLOW

@@ -1,9 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$comment": "See https://json-schema.org/learn/ for documentation about JSON schemas",
-  "type": "object",
-  "properties": {
-    "department": { "enum": ["tech", "legal"] }
-  },
-  "required": ["department"]
-}

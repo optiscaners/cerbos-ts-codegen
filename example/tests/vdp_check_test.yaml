@@ -1,0 +1,75 @@
+name: VDP Check test suite
+description: Tests for verifying the VDP (vehicle data protection) resource policy
+options:
+  now: "2022-08-02T15:00:00Z"
+
+tests:
+  - name: admins can do everything
+    input:
+      principals:
+        - admin
+      resources:
+        - us_vdp_check
+      actions:
+        - create
+        - read
+        - update:status
+
+    expected:
+      - principal: admin
+        resource: us_vdp_check
+        actions:
+          create: EFFECT_ALLOW
+          update:status: EFFECT_ALLOW
+          read: EFFECT_ALLOW
+
+  - name: fleet group owners and fleet editors can create, read and comment, but not approve or deny VDP Checks
+    input:
+      principals:
+        - tech_us_owner
+        - us_fleet_editor
+      resources:
+        - us_vdp_check
+      actions:
+        - create
+        - read
+        - update:status
+        - update:add_comment
+
+    expected:
+      - principal: tech_us_owner
+        resource: us_vdp_check
+        actions:
+          create: EFFECT_ALLOW
+          read: EFFECT_ALLOW
+          update:add_comment: EFFECT_ALLOW
+          update:status: EFFECT_DENY
+
+      - principal: us_fleet_editor
+        resource: us_vdp_check
+        actions:
+          create: EFFECT_ALLOW
+          read: EFFECT_ALLOW
+          update:add_comment: EFFECT_ALLOW
+          update:status: EFFECT_DENY
+
+  - name: legal fleet group members can read, comment, approve or deny, but not create VDP Checks
+    input:
+      principals:
+        - legal_us_member
+      resources:
+        - us_vdp_check
+      actions:
+        - create
+        - read
+        - update:status
+        - update:add_comment
+
+    expected:
+      - principal: legal_us_member
+        resource: us_vdp_check
+        actions:
+          create: EFFECT_DENY
+          read: EFFECT_ALLOW
+          update:status: EFFECT_ALLOW
+          update:add_comment: EFFECT_ALLOW

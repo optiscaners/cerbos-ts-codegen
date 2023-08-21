@@ -1,0 +1,25 @@
+name: Legal UI test suite
+description: Tests for the ui of a member of the legal department
+options:
+  now: "2022-08-02T15:00:00Z"
+
+tests:
+  - name: Owner can view & delete
+    input:
+      principals:
+        - minimal_legal_user
+        - tech_us_owner
+      resources:
+        - vdp_menu
+      actions:
+        - show
+
+    expected:
+      - principal: minimal_legal_user
+        resource: vdp_menu
+        actions:
+          show: EFFECT_ALLOW
+      - principal: tech_us_owner
+        resource: vdp_menu
+        actions:
+          show: EFFECT_DENY

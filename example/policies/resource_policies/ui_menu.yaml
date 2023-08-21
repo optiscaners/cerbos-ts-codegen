@@ -3,20 +3,19 @@ resourcePolicy:
   version: default
   resource: vdp_menu
   rules:
-
-    - actions: [show]
-      effect: EFFECT_ALLOW
-      roles: [admin]
-    
     - actions: [show]
       effect: EFFECT_ALLOW
       roles: [user]
       condition:
-        match: 
+        match:
           all:
             of:
               - expr: P.attr.department == "legal"
 
+    - actions: [show]
+      effect: EFFECT_ALLOW
+      roles: [admin]
+
   schemas:
     principalSchema:
-      ref: cerbos://schemas/principal/department.json
+      ref: cerbos:///principal.json

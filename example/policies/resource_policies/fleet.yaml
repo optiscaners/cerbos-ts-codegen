@@ -1,52 +1,61 @@
 apiVersion: api.cerbos.dev/v1
-variables:
-  business_partner: P.attr.businessPartners[R.attr.businessPartner]
+
 resourcePolicy:
   version: default
   resource: fleet
+  variables:
+    import:
+      - with_fleet_resource_variables
+    local:
+      user_role: P.attr.fleets[R.id].role
+
   rules:
-    
     - actions: [read]
       effect: EFFECT_ALLOW
       roles: [user]
-      condition: 
-        match: 
+      condition:
+        match:
           any:
             of:
-              - expr: V.business_partner.role == "owner"
-              - expr: P.id in R.attr.owner
-              - expr: V.business_partner.custom_attributes.all 
-              - all:
-                  of:
-                    - expr: V.business_partner != null
-                    # TBD: AND vs OR for custom attributes array
-                    - expr: > 
-                        V.business_partner.custom_attributes.exists(ra, 
-                          ra in R.attr.custom_attributes && 
-                          hasIntersection(V.business_partner.custom_attributes[ra], R.attr.custom_attributes[ra])
-                        )
+              - expr: size(V.common_fleet_groups) > 0
+              - expr: V.user_role != null
 
-    - actions: [read, update]
+    - actions: ["*"]
       effect: EFFECT_ALLOW
       roles: [user]
-      condition: 
-        match: 
-          expr: V.business_partner.role == "fleetEditor"
+      condition:
+        match:
+          expr: V.shared_fleet_groups.exists(g, P.attr.fleetGroups[g].role == "owner")
+
+    - actions: [create]
+      effect: EFFECT_ALLOW
+      roles: [user]
+      condition:
+        match:
+          expr: V.is_owner_of_common_fleet_group
+
+    - actions: [create:without_group]
+      effect: EFFECT_DENY
+      roles: [user]
+      condition:
+        match:
+          expr: V.is_owner_of_common_fleet_group
+
+    - actions: [update]
+      effect: EFFECT_ALLOW
+      roles: [user]
+      condition:
+        match:
+          expr: V.user_role == "editor"
 
     - actions: ["*"]
       effect: EFFECT_ALLOW
       roles: [admin]
-    
-    - actions: [create, read, update, delete]
-      effect: EFFECT_ALLOW
-      roles: [user]
-      condition: 
-        match: 
-          expr: V.business_partner.role == "owner"
 
   schemas:
     principalSchema:
-      ref: cerbos://schemas/principal/business_partner.json
+      ref: cerbos:///principal.json
     resourceSchema:
-      ref: cerbos://schemas/fleet.json
-      
+      ref: cerbos:///fleet.json
+      ignoreWhen:
+        actions: ["create", "create:*"]

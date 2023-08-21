@@ -1,0 +1,42 @@
+name: Rights Assignment test suite
+description: Tests for the ui of a member of the legal department
+options:
+  now: "2022-08-02T15:00:00Z"
+
+principals:
+  rights_manager:
+    id: rights_manager
+    roles: [rights_manager]
+    attr:
+      department: "tech"
+      fleetGroups: {}
+      fleets: {}
+
+resources:
+  rights_assignment:
+    id: rights_assignment
+    kind: rights_assignment
+
+tests:
+  - name: Admin & Rights Manager can read & update rights
+    input:
+      principals:
+        - admin
+        - rights_manager
+      resources:
+        - rights_assignment
+      actions:
+        - read
+        - update
+
+    expected:
+      - principal: admin
+        resource: rights_assignment
+        actions:
+          read: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+      - principal: rights_manager
+        resource: rights_assignment
+        actions:
+          read: EFFECT_ALLOW
+          update: EFFECT_ALLOW

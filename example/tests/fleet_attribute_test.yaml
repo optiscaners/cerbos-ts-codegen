@@ -1,0 +1,38 @@
+name: Fleet Attribute test suite
+description: Tests for verifying the fleet attribute resource policy
+options:
+  now: "2022-08-02T15:00:00Z"
+
+tests:
+  - name: Fleet attributes CRUD
+    input:
+      principals:
+        - minimal_tech_user
+        - minimal_legal_user
+        - admin
+      resources:
+        - random_fleet_attribute
+      actions:
+        - create
+        - read
+        - delete
+
+    expected:
+      - principal: minimal_tech_user
+        resource: random_fleet_attribute
+        actions:
+          create: EFFECT_DENY
+          read: EFFECT_ALLOW
+          delete: EFFECT_DENY
+      - principal: minimal_legal_user
+        resource: random_fleet_attribute
+        actions:
+          create: EFFECT_DENY
+          read: EFFECT_ALLOW
+          delete: EFFECT_DENY
+      - principal: admin
+        resource: random_fleet_attribute
+        actions:
+          create: EFFECT_ALLOW
+          read: EFFECT_ALLOW
+          delete: EFFECT_ALLOW

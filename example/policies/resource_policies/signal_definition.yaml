@@ -1,0 +1,61 @@
+apiVersion: api.cerbos.dev/v1
+
+resourcePolicy:
+  version: default
+  resource: signal_definition
+
+  variables:
+    local:
+      fleet_group: P.attr.fleetGroups[R.attr.fleetGroup].role
+      fleet: P.attr.fleets[R.attr.fleet].role
+
+  rules:
+    - actions: [read]
+      effect: EFFECT_ALLOW
+      roles: [user]
+      condition:
+        match:
+          any:
+            of:
+              - expr: V.fleet_group != null
+              - expr: V.fleet != null
+
+    - actions: [add]
+      effect: EFFECT_ALLOW
+      roles: [user]
+      condition:
+        match:
+          any:
+            of:
+              - expr: V.fleet_group == "owner"
+              - expr: V.fleet == "editor"
+
+    - actions: [update]
+      effect: EFFECT_ALLOW
+      roles: [user]
+      condition:
+        match:
+          any:
+            of:
+              - expr: V.fleet_group == "owner"
+              - expr: V.fleet == "editor"
+
+    - actions: [remove]
+      effect: EFFECT_ALLOW
+      roles: [user]
+      condition:
+        match:
+          any:
+            of:
+              - expr: V.fleet_group == "owner"
+              - expr: V.fleet == "editor"
+
+    - actions: ["*"]
+      effect: EFFECT_ALLOW
+      roles: [admin]
+
+  schemas:
+    principalSchema:
+      ref: cerbos:///principal.json
+    resourceSchema:
+      ref: cerbos:///signal_definition.json

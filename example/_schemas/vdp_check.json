@@ -1,8 +1,19 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "type": "object",
-  "properties": {
-    "businessPartner": {"type": "string"}
-  },
-  "required": ["businessPartner"]
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+        "fleet": {
+            "type": "string"
+        },
+        "fleetGroups": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        }
+    },
+    "required": [
+        "fleetGroups",
+        "fleet"
+    ]
 }

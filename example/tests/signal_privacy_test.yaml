@@ -1,0 +1,65 @@
+name: Signal Privacy test suite
+description: Tests for verifying the signal privacy resource policy
+options:
+  now: "2022-08-02T15:00:00Z"
+
+tests:
+  - name: admins can do everything
+    input:
+      principals:
+        - admin
+      resources:
+        - signal_privacy
+      actions:
+        - update
+        - read
+
+    expected:
+      - principal: admin
+        resource: signal_privacy
+        actions:
+          update: EFFECT_ALLOW
+          read: EFFECT_ALLOW
+
+  - name: only legal department can update, all others can read
+    input:
+      principals:
+        - legal_us_member
+        - tech_us_member
+        - tech_us_owner
+        - us_fleet_editor
+        - tech_emea_owner
+
+      resources:
+        - signal_privacy
+
+      actions:
+        - update
+        - read
+
+    expected:
+      - principal: legal_us_member
+        resource: signal_privacy
+        actions:
+          update: EFFECT_ALLOW
+          read: EFFECT_ALLOW
+      - principal: tech_us_member
+        resource: signal_privacy
+        actions:
+          update: EFFECT_DENY
+          read: EFFECT_ALLOW
+      - principal: tech_us_owner
+        resource: signal_privacy
+        actions:
+          update: EFFECT_DENY
+          read: EFFECT_ALLOW
+      - principal: us_fleet_editor
+        resource: signal_privacy
+        actions:
+          update: EFFECT_DENY
+          read: EFFECT_ALLOW
+      - principal: tech_emea_owner
+        resource: signal_privacy
+        actions:
+          update: EFFECT_DENY
+          read: EFFECT_ALLOW

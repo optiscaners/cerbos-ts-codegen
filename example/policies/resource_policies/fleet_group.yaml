@@ -1,0 +1,39 @@
+# TODO: Check if these policies make sense
+apiVersion: api.cerbos.dev/v1
+
+resourcePolicy:
+  version: default
+  resource: fleet_group
+  variables:
+    local:
+      fleet_group_member_type: P.attr.fleetGroups[R.id].role
+
+  rules:
+    - actions: ["*"]
+      effect: EFFECT_ALLOW
+      roles: [admin]
+
+    - actions: ["*"]
+      effect: EFFECT_ALLOW
+      roles: [user]
+      condition:
+        match:
+          expr: V.fleet_group_member_type == "owner"
+
+    - actions: [read]
+      effect: EFFECT_ALLOW
+      roles: [user]
+      condition:
+        match:
+          expr: V.fleet_group_member_type != null
+
+    - actions: [update]
+      effect: EFFECT_ALLOW
+      roles: [user]
+      condition:
+        match:
+          expr: V.fleet_group_member_type == "fleetEditor"
+
+  schemas:
+    principalSchema:
+      ref: cerbos:///principal.json

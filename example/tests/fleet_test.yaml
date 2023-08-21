@@ -1,0 +1,131 @@
+name: Fleet test suite
+description: Tests for verifying the fleet resource policy
+options:
+  now: "2022-08-02T15:00:00Z"
+
+tests:
+  - name: Only admins & owners of fleet group can create, read, update & delete
+    input:
+      principals:
+        - tech_us_owner
+        - tech_emea_owner
+        - tech_emea_member
+        - admin
+      resources:
+        - us_fleet
+      actions:
+        - read
+        - update
+        - delete
+
+    expected:
+      - principal: tech_us_owner
+        resource: us_fleet
+        actions:
+          read: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          delete: EFFECT_ALLOW
+
+      - principal: admin
+        resource: us_fleet
+        actions:
+          read: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          delete: EFFECT_ALLOW
+
+      - principal: tech_emea_owner
+        resource: us_fleet
+        actions:
+          read: EFFECT_DENY
+          update: EFFECT_DENY
+          delete: EFFECT_DENY
+
+  - name: Regular fleet group members can only read
+    input:
+      principals:
+        - tech_us_member
+      resources:
+        - us_fleet
+      actions:
+        - read
+        - update
+        - delete
+    expected:
+      - principal: tech_us_member
+        resource: us_fleet
+        actions:
+          read: EFFECT_ALLOW
+          delete: EFFECT_DENY
+          update: EFFECT_DENY
+
+  - name: users with editor rights can read, update the related fleet, but not unrelated fleets
+    input:
+      principals:
+        - us_fleet_editor
+      resources:
+        - us_fleet
+        - emea_fleet
+      actions:
+        - read
+        - update
+        - delete
+
+    expected:
+      - principal: us_fleet_editor
+        resource: us_fleet
+        actions:
+          read: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          delete: EFFECT_DENY
+
+      - principal: us_fleet_editor
+        resource: emea_fleet
+        actions:
+          read: EFFECT_DENY
+          update: EFFECT_DENY
+          delete: EFFECT_DENY
+
+  - name: Admins and group owners can create new fleets
+    input:
+      principals:
+        - tech_us_owner
+        - tech_emea_owner
+        - tech_emea_member
+        - us_fleet_editor
+        - admin
+      resources:
+        - not_yet_created_fleet
+      actions:
+        - create
+        - create:without_group
+
+    expected:
+      - principal: tech_us_owner
+        resource: not_yet_created_fleet
+        actions:
+          create: EFFECT_ALLOW
+          create:without_group: EFFECT_DENY
+
+      - principal: tech_emea_owner
+        resource: not_yet_created_fleet
+        actions:
+          create: EFFECT_ALLOW
+          create:without_group: EFFECT_DENY
+
+      - principal: tech_emea_member
+        resource: not_yet_created_fleet
+        actions:
+          create: EFFECT_DENY
+          create:without_group: EFFECT_DENY
+
+      - principal: us_fleet_editor
+        resource: not_yet_created_fleet
+        actions:
+          create: EFFECT_DENY
+          create:without_group: EFFECT_DENY
+
+      - principal: admin
+        resource: not_yet_created_fleet
+        actions:
+          create: EFFECT_ALLOW
+          create:without_group: EFFECT_ALLOW

@@ -1,0 +1,81 @@
+name: Dataset test suite
+description: Tests for verifying the dataset resource policy
+options:
+  now: "2022-08-02T15:00:00Z"
+
+tests:
+  - name: admins, owners of related fleet groups & related fleet editors can add, read, update & remove datasets to fleets
+    input:
+      principals:
+        - tech_us_owner
+        - us_fleet_editor
+        - admin
+      resources:
+        - us_dataset
+      actions:
+        - add
+        - read
+        - create
+        - update
+        - remove
+
+    expected:
+      - principal: tech_us_owner
+        resource: us_dataset
+        actions:
+          read: EFFECT_ALLOW
+          add: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          remove: EFFECT_ALLOW
+
+      - principal: us_fleet_editor
+        resource: us_dataset
+        actions:
+          read: EFFECT_ALLOW
+          add: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          remove: EFFECT_ALLOW
+
+      - principal: admin
+        resource: us_dataset
+        actions:
+          read: EFFECT_ALLOW
+          add: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          remove: EFFECT_ALLOW
+
+  - name: tech & legal members of related fleet group can read, but not add, update or remove datasets to fleets
+    input:
+      principals:
+        - tech_us_member
+        - legal_us_member
+      resources:
+        - us_dataset
+      actions:
+        - add
+        - read
+        - create
+        - update
+        - remove
+
+    expected:
+      - principal: tech_us_member
+        resource: us_dataset
+        actions:
+          read: EFFECT_ALLOW
+          add: EFFECT_DENY
+          create: EFFECT_DENY
+          update: EFFECT_DENY
+          remove: EFFECT_DENY
+
+      - principal: legal_us_member
+        resource: us_dataset
+        actions:
+          read: EFFECT_ALLOW
+          add: EFFECT_DENY
+          create: EFFECT_DENY
+          update: EFFECT_DENY
+          remove: EFFECT_DENY

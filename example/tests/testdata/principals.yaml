@@ -1,0 +1,93 @@
+principals:
+  minimal_tech_user:
+    id: minimal_tech_user@estino.com
+    roles:
+      - user
+    attr:
+      department: "tech"
+      fleetGroups: {}
+      fleets: {}
+
+  minimal_legal_user:
+    id: minimal_legal_user@estino.com
+    roles:
+      - user
+    attr:
+      department: "legal"
+      fleetGroups: {}
+      fleets: {}
+
+  tech_us_owner:
+    id: tech_us_owner_user@estino.com
+    roles:
+      - user
+    attr:
+      department: "tech"
+      fleetGroups:
+        us_fleet_group:
+          role: "owner"
+      fleets: {}
+
+  tech_us_member:
+    id: tech_us_member@estino.com
+    roles:
+      - user
+    attr:
+      department: "tech"
+      fleetGroups:
+        us_fleet_group:
+          role: "member"
+      fleets: {}
+
+  legal_us_member:
+    id: tech_us_member@estino.com
+    roles:
+      - user
+    attr:
+      department: "legal"
+      fleetGroups:
+        us_fleet_group:
+          role: "member"
+      fleets: {}
+
+  tech_emea_owner:
+    id: tech_emea_owner@estino.com
+    roles:
+      - user
+    attr:
+      department: "tech"
+      fleetGroups:
+        emea:
+          role: "owner"
+      fleets: {}
+
+  tech_emea_member:
+    id: tech_emea_member@estino.com
+    roles:
+      - user
+    attr:
+      department: "tech"
+      fleetGroups:
+        emea:
+          role: "member"
+      fleets: {}
+
+  us_fleet_editor:
+    id: tech_emea_member@estino.com
+    roles:
+      - user
+    attr:
+      department: "tech"
+      fleetGroups:
+        emea:
+          role: "member"
+      fleets: { us_fleet: { role: "editor" } }
+
+  admin:
+    id: admin@estino.com
+    roles:
+      - admin
+    attr:
+      department: "tech"
+      fleetGroups: {}
+      fleets: {}

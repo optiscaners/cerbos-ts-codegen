@@ -1,0 +1,93 @@
+name: Vehicle test suite
+description: Tests for verifying the vehicle resource policy
+options:
+  now: "2022-08-02T15:00:00Z"
+
+tests:
+  - name: admins can do everything
+    input:
+      principals:
+        - admin
+      resources:
+        - us_vehicle
+      actions:
+        - read
+        - update
+        - delete
+
+    expected:
+      - principal: admin
+        resource: us_vehicle
+        actions:
+          read: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          delete: EFFECT_ALLOW
+
+  - name: regular fleet and group members can read non-sensitive data (but not VINs) but not create, update or delete
+    input:
+      principals:
+        - tech_us_member
+      resources:
+        - us_vehicle
+      actions:
+        - read:non_sensitive
+        - read:vin
+        - update
+        - delete
+        - create
+
+    expected:
+      - principal: tech_us_member
+        resource: us_vehicle
+        actions:
+          read:non_sensitive: EFFECT_ALLOW
+          read:vin: EFFECT_DENY
+          update: EFFECT_DENY
+          delete: EFFECT_DENY
+          create: EFFECT_DENY
+
+  - name: fleet group owners can read all data (incl VINs), create, update and delete
+    input:
+      principals:
+        - tech_us_owner
+      resources:
+        - us_vehicle
+      actions:
+        - read:non_sensitive
+        - read:vin
+        - update
+        - delete
+        - create
+
+    expected:
+      - principal: tech_us_owner
+        resource: us_vehicle
+        actions:
+          read:non_sensitive: EFFECT_ALLOW
+          read:vin: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          delete: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+
+  - name: fleet editors can read non-sensitive data (but not VINs), create, update and delete
+    input:
+      principals:
+        - us_fleet_editor
+      resources:
+        - us_vehicle
+      actions:
+        - read:non_sensitive
+        - read:vin
+        - update
+        - delete
+        - create
+
+    expected:
+      - principal: us_fleet_editor
+        resource: us_vehicle
+        actions:
+          read:non_sensitive: EFFECT_ALLOW
+          read:vin: EFFECT_DENY
+          update: EFFECT_ALLOW
+          delete: EFFECT_DENY
+          create: EFFECT_DENY

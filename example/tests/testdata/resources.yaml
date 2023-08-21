@@ -1,0 +1,78 @@
+resources:
+  us_fleet_group:
+    id: us_fleet_group
+    kind: fleet_group
+
+  emea_fleet_group:
+    id: emea_fleet_group
+    kind: fleet_group
+
+  us_fleet:
+    id: us_fleet
+    kind: fleet
+    attr:
+      fleetGroups:
+        - us_fleet_group
+
+  emea_fleet:
+    id: emea_fleet
+    kind: fleet
+    attr:
+      fleetGroups:
+        - emea_fleet_group
+
+  not_yet_created_fleet:
+    id: not_yet_created_fleet
+    kind: fleet
+
+  us_vehicle:
+    id: us_vehicle
+    kind: vehicle
+    attr:
+      fleet: us_fleet
+      fleetGroups:
+        - us_fleet_group
+
+  emea_vehicle:
+    id: emea_vehicle
+    kind: vehicle
+    attr:
+      fleet: emea_fleet
+      fleetGroups:
+        - emea_fleet_group
+
+  vdp_menu:
+    id: vdp_menu
+    kind: vdp_menu
+
+  random_fleet_attribute:
+    id: random_fleet_attribute
+    kind: fleet_attribute
+
+  us_vdp_check:
+    id: random_vdp_check
+    kind: vdp_check
+    attr:
+      fleet: us_fleet
+      fleetGroups:
+        - us_fleet_group
+
+  signal_privacy:
+    id: signal_privacy
+    kind: signal_privacy
+
+  us_dataset:
+    id: us_dataset
+    kind: dataset
+    attr:
+      fleet: us_fleet
+      fleetGroups:
+        - us_fleet_group
+
+  us_signal_definition:
+    id: us_dataset
+    kind: dataset
+    attr:
+      fleet: us_fleet
+      fleetGroups:
+        - us_fleet_group

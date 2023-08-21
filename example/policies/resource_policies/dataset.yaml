@@ -2,35 +2,31 @@ apiVersion: api.cerbos.dev/v1
 
 resourcePolicy:
   version: default
-  resource: vehicle
+  resource: dataset
   variables:
     import:
       - with_fleet_resource_variables
 
   rules:
-    - actions: [read:non_sensitive]
+    - actions: [read]
       effect: EFFECT_ALLOW
       roles: [user]
       condition:
         match:
           any:
             of:
-              - expr: V.common_fleet_groups != null && size(V.common_fleet_groups) > 0
+              - expr: size(V.common_fleet_groups) > 0
               - expr: V.user_role_in_fleet != null
 
-    - actions: [read:non_sensitive, update]
+    - actions: [add, create, update, remove]
       effect: EFFECT_ALLOW
       roles: [user]
       condition:
         match:
-          expr: V.user_role_in_fleet == "editor"
-
-    - actions: [create, read:*, update, delete] # read:* includes read:vin
-      effect: EFFECT_ALLOW
-      roles: [user]
-      condition:
-        match:
-          expr: V.is_owner_of_common_fleet_group
+          any:
+            of:
+              - expr: V.is_owner_of_common_fleet_group
+              - expr: V.user_role_in_fleet == "editor"
 
     - actions: ["*"]
       effect: EFFECT_ALLOW
@@ -40,4 +36,4 @@ resourcePolicy:
     principalSchema:
       ref: cerbos:///principal.json
     resourceSchema:
-      ref: cerbos:///vehicle.json
+      ref: cerbos:///dataset.json

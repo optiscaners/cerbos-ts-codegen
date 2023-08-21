@@ -1,0 +1,6 @@
+{
+  "yaml.schemas": {
+    "https://api.cerbos.dev/latest/cerbos/policy/v1/Policy.schema.json": "policies/**/*",
+    "https://api.cerbos.dev/latest/cerbos/policy/v1/TestSuite.schema.json": "tests/**/*_test.yaml"
+  }
+}

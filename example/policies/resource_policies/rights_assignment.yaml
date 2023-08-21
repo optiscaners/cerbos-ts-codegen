@@ -1,12 +1,18 @@
 apiVersion: api.cerbos.dev/v1
+
 resourcePolicy:
   version: default
-  resource: fleet_attribute
+  resource: rights_assignment
+
   rules:
     - actions: [read]
       effect: EFFECT_ALLOW
       roles: [user]
 
-    - actions: [create, read, delete]
+    - actions: ["*"]
       effect: EFFECT_ALLOW
-      roles: [admin]
+      roles: [admin, rights_manager]
+
+  schemas:
+    principalSchema:
+      ref: cerbos:///principal.json
