@@ -3,7 +3,7 @@ import path from "path"
 
 /** removes empty elements from an array, so that TypeScript knows */
 export function notEmpty<TValue>(
-	value: TValue | null | undefined
+	value: TValue | null | undefined,
 ): value is TValue {
 	return value != null
 }
@@ -15,7 +15,7 @@ export function uniqueArray<T>(arr: T[]): T[] {
 export function findFiles(
 	dir: string,
 	extensions: string[],
-	fileList: string[] = []
+	fileList: string[] = [],
 ) {
 	const files = fs.readdirSync(dir)
 
@@ -38,5 +38,13 @@ export function resolvePath(inputPath: string) {
 		return inputPath
 	} else {
 		return path.resolve(process.cwd(), inputPath)
+	}
+}
+
+export function Try<T>(fn: () => T, err: (e: Error) => any): T {
+	try {
+		return fn()
+	} catch (e) {
+		return err(e as Error)
 	}
 }

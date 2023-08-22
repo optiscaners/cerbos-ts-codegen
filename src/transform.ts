@@ -1,17 +1,25 @@
 import chalk from "chalk"
-import fs from "fs"
+import fs, { readFileSync } from "fs"
 import yaml from "js-yaml"
-import { compileFromFile } from "json-schema-to-typescript"
-import { generateName } from "json-schema-to-typescript/dist/src/utils.js"
-import path from "path"
+import { JSONSchema4 } from "json-schema"
+import { compile } from "json-schema-to-typescript"
+import {
+	justName,
+	toSafeString,
+} from "json-schema-to-typescript/dist/src/utils.js"
+import path, { dirname } from "path"
 import { format } from "prettier"
 import { Project } from "ts-morph"
 import { z } from "zod"
-import { findFiles, notEmpty, resolvePath, uniqueArray } from "./util.js"
+import { Try, findFiles, notEmpty, resolvePath, uniqueArray } from "./util.js"
+
+function generateName(from: string) {
+	return toSafeString(justName(from) + "Attributes")
+}
 
 export default async function transform(
 	resourceFolderPath: string,
-	destination: string
+	destination: string,
 ) {
 	const project = new Project({})
 
@@ -22,7 +30,7 @@ export default async function transform(
 
 	const schemaFiles = await findFiles(
 		path.join(resolvePath(resourceFolderPath), "/_schemas"),
-		[".json"]
+		[".json"],
 	)
 
 	// Zod Schema to validate Resource Policy YAML Files
@@ -34,7 +42,7 @@ export default async function transform(
 				z.object({
 					principalSchema: z.optional(z.object({ ref: z.string() })),
 					resourceSchema: z.optional(z.object({ ref: z.string() })),
-				})
+				}),
 			),
 		}),
 	})
@@ -64,7 +72,7 @@ export default async function transform(
 
 			cerbosModule.addStatements(createdInterfaces.map((i) => i.getText()))
 			temporaryFile.delete()
-		})
+		}),
 	)
 
 	// create a type alias for each resource policy.
@@ -72,10 +80,10 @@ export default async function transform(
 	const paramsUnionEntry = await Promise.all(
 		yamlFiles.map(async (filePath) => {
 			try {
-				const fileName = generateName(path.parse(filePath).name, new Set())
+				const fileName = generateName(filePath)
 
 				const parsed = yamlSchema.parse(
-					yaml.load(fs.readFileSync(filePath, "utf8"))
+					yaml.load(fs.readFileSync(filePath, "utf8")),
 				)
 
 				const locallyAllowedParamsType = cerbosModule.addTypeAlias({
@@ -85,25 +93,22 @@ export default async function transform(
 				parsed.resourcePolicy.schemas?.principalSchema != null
 					? ` & {
         attributes?: ${generateName(
-					path.parse(parsed.resourcePolicy.schemas.principalSchema?.ref).name,
-					new Set()
+					parsed.resourcePolicy.schemas.principalSchema?.ref,
 				)}
       }`
 					: ""
 			}
       resource: { kind: "${parsed.resourcePolicy.resource}"${
-						parsed.resourcePolicy.schemas?.resourceSchema != null
-							? `, attributes: ${generateName(
-									path.parse(parsed.resourcePolicy.schemas.resourceSchema.ref)
-										.name,
-									new Set()
-							  )}`
-							: ""
-					} }
+				parsed.resourcePolicy.schemas?.resourceSchema != null
+					? `, attributes: ${generateName(
+							parsed.resourcePolicy.schemas.resourceSchema.ref,
+					  )}`
+					: ""
+			} }
       action: ${uniqueArray(
 				parsed.resourcePolicy.rules.flatMap((rule) =>
-					rule.actions.map((action) => `"${action}"`)
-				)
+					rule.actions.map((action) => `"${action}"`),
+				),
 			).join(" | ")}
     }`,
 				})
@@ -111,7 +116,7 @@ export default async function transform(
 			} catch (e) {
 				return undefined
 			}
-		})
+		}),
 	)
 
 	const allowedParamsType = cerbosModule.addTypeAlias({
@@ -130,18 +135,40 @@ export default async function transform(
 	})
 
 	console.log(
-		"\nCreated File: \n" + chalk.bold(sourceFile.getFilePath()) + "\n"
+		"\nCreated File: \n" + chalk.bold(sourceFile.getFilePath()) + "\n",
 	)
 
 	sourceFile.replaceWithText(
-		format(sourceFile.getText(), {
+		await format(sourceFile.getText(), {
 			parser: "typescript",
 			useTabs: true,
 			semi: false,
-		})
+		}),
 	)
 
 	// Save the source file
 	await sourceFile.save()
 	return sourceFile
+}
+
+/**
+ * overrides the default compile function from json-schema-to-typescript
+ * updates the name of the generated interface to match the file name PLUS "Attributes"
+ */
+export function compileFromFile(filename: string): Promise<string> {
+	const contents = Try(
+		() => readFileSync(filename),
+		() => {
+			throw new ReferenceError(`Unable to read file "${filename}"`)
+		},
+	)
+	const schema = Try<JSONSchema4>(
+		() => JSON.parse(contents.toString()),
+		() => {
+			throw new TypeError(`Error parsing JSON in file "${filename}"`)
+		},
+	)
+	return compile(schema, generateName(filename), {
+		cwd: dirname(filename),
+	})
 }

@@ -7,16 +7,16 @@ declare module "@cerbos/http" {
 	interface HTTP {
 		isAllowed(request: isAllowedParams): Promise<boolean>
 	}
-	export interface Dataset {
+	export interface DatasetAttributes {
 		fleet: string
 		fleetGroups: string[]
 		[k: string]: unknown
 	}
-	export interface Fleet {
+	export interface FleetAttributes {
 		fleetGroups: string[]
 		[k: string]: unknown
 	}
-	export interface Principal {
+	export interface PrincipalAttributes {
 		department: "tech" | "legal"
 		fleetGroups: {
 			/**
@@ -40,88 +40,91 @@ declare module "@cerbos/http" {
 		}
 		[k: string]: unknown
 	}
-	export interface SignalDefinition {
+	export interface SignalDefinitionAttributes {
 		fleet: string
 		fleetGroup: string
 		[k: string]: unknown
 	}
-	export interface VdpCheck {
+	export interface VdpCheckAttributes {
 		fleet: string
 		fleetGroups: string[]
 		[k: string]: unknown
 	}
-	export interface Vehicle {
+	export interface VehicleAttributes {
 		fleet: string
 		fleetGroups: string[]
 		[k: string]: unknown
 	}
 
-	type isAllowedParamsDataset = {
+	type isAllowedParamsDatasetAttributes = {
 		principal: Principal & {
-			attributes?: Principal
+			attributes?: PrincipalAttributes
 		}
-		resource: { kind: "dataset"; attributes: Dataset }
+		resource: { kind: "dataset"; attributes: DatasetAttributes }
 		action: "read" | "add" | "create" | "update" | "remove" | "*"
 	}
-	type isAllowedParamsFleet = {
+	type isAllowedParamsFleetAttributes = {
 		principal: Principal & {
-			attributes?: Principal
+			attributes?: PrincipalAttributes
 		}
-		resource: { kind: "fleet"; attributes: Fleet }
+		resource: { kind: "fleet"; attributes: FleetAttributes }
 		action: "read" | "*" | "create" | "create:without_group" | "update"
 	}
-	type isAllowedParamsFleetAttribute = {
+	type isAllowedParamsFleetAttributeAttributes = {
 		principal: Principal
 		resource: { kind: "fleet_attribute" }
 		action: "read" | "create" | "delete"
 	}
-	type isAllowedParamsFleetGroup = {
+	type isAllowedParamsFleetGroupAttributes = {
 		principal: Principal & {
-			attributes?: Principal
+			attributes?: PrincipalAttributes
 		}
 		resource: { kind: "fleet_group" }
 		action: "*" | "read" | "update"
 	}
-	type isAllowedParamsRightsAssignment = {
+	type isAllowedParamsRightsAssignmentAttributes = {
 		principal: Principal & {
-			attributes?: Principal
+			attributes?: PrincipalAttributes
 		}
 		resource: { kind: "rights_assignment" }
 		action: "read" | "*"
 	}
-	type isAllowedParamsSignalDefinition = {
+	type isAllowedParamsSignalDefinitionAttributes = {
 		principal: Principal & {
-			attributes?: Principal
+			attributes?: PrincipalAttributes
 		}
-		resource: { kind: "signal_definition"; attributes: SignalDefinition }
+		resource: {
+			kind: "signal_definition"
+			attributes: SignalDefinitionAttributes
+		}
 		action: "read" | "add" | "update" | "remove" | "*"
 	}
-	type isAllowedParamsSignalPrivacy = {
+	type isAllowedParamsSignalPrivacyAttributes = {
 		principal: Principal & {
-			attributes?: Principal
+			attributes?: PrincipalAttributes
 		}
 		resource: { kind: "signal_privacy" }
 		action: "read" | "update" | "*"
 	}
-	type isAllowedParamsUiMenu = {
+	type isAllowedParamsUiMenuAttributes = {
 		principal: Principal & {
-			attributes?: Principal
+			attributes?: PrincipalAttributes
 		}
 		resource: { kind: "vdp_menu" }
 		action: "show"
 	}
-	type isAllowedParamsVdpCheck = {
+	type isAllowedParamsVdpCheckAttributes = {
 		principal: Principal & {
-			attributes?: Principal
+			attributes?: PrincipalAttributes
 		}
-		resource: { kind: "vdp_check"; attributes: VdpCheck }
+		resource: { kind: "vdp_check"; attributes: VdpCheckAttributes }
 		action: "create" | "read" | "update:add_comment" | "update:status" | "*"
 	}
-	type isAllowedParamsVehicle = {
+	type isAllowedParamsVehicleAttributes = {
 		principal: Principal & {
-			attributes?: Principal
+			attributes?: PrincipalAttributes
 		}
-		resource: { kind: "vehicle"; attributes: Vehicle }
+		resource: { kind: "vehicle"; attributes: VehicleAttributes }
 		action:
 			| "read:non_sensitive"
 			| "update"
@@ -132,15 +135,15 @@ declare module "@cerbos/http" {
 	}
 	type isAllowedParams = IsAllowedRequest &
 		(
-			| isAllowedParamsDataset
-			| isAllowedParamsFleet
-			| isAllowedParamsFleetAttribute
-			| isAllowedParamsFleetGroup
-			| isAllowedParamsRightsAssignment
-			| isAllowedParamsSignalDefinition
-			| isAllowedParamsSignalPrivacy
-			| isAllowedParamsUiMenu
-			| isAllowedParamsVdpCheck
-			| isAllowedParamsVehicle
+			| isAllowedParamsDatasetAttributes
+			| isAllowedParamsFleetAttributes
+			| isAllowedParamsFleetAttributeAttributes
+			| isAllowedParamsFleetGroupAttributes
+			| isAllowedParamsRightsAssignmentAttributes
+			| isAllowedParamsSignalDefinitionAttributes
+			| isAllowedParamsSignalPrivacyAttributes
+			| isAllowedParamsUiMenuAttributes
+			| isAllowedParamsVdpCheckAttributes
+			| isAllowedParamsVehicleAttributes
 		)
 }
