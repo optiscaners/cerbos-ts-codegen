@@ -1,4 +1,4 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
 
 settings:
   autoInstallPeers: true
@@ -9,8 +9,8 @@ dependencies:
     specifier: ^0.13.0
     version: 0.13.0
   '@cerbos/http':
-    specifier: ^0.14.0
-    version: 0.14.0
+    specifier: ^0.17.0
+    version: 0.17.0
   '@inquirer/prompts':
     specifier: ^3.0.3
     version: 3.0.3
@@ -75,11 +75,18 @@ packages:
       uuid: 9.0.0
     dev: false
 
-  /@cerbos/http@0.14.0:
-    resolution: {integrity: sha512-DGvPM8ucHIaSyVTblo4XxipglL5b9LpluUP0fmYrl1zTqGYbTRmJFURCkjm0Y99u7yP1oJpPJV7n08U6mvlH9w==}
-    engines: {node: '>= 16'}
+  /@cerbos/core@0.16.0:
+    resolution: {integrity: sha512-5wcfWXhsEyRUyj/MfJg+pvclSQpS6Ei3V6Qf8/FD4wlQLciQkzsTXG3e55MmXayx8nPhYe/8yU598Cm5VavbBQ==}
+    engines: {node: '>= 18'}
     dependencies:
-      '@cerbos/core': 0.13.0
+      uuid: 9.0.1
+    dev: false
+
+  /@cerbos/http@0.17.0:
+    resolution: {integrity: sha512-Mwzvog1MJW/l5iXJqssZwkWJfVfWeyDb/chIifsvjnM/lzTZpi1vI03GNS2eFKerlpJCCr/dLRoG/D7AWWJ6zg==}
+    engines: {node: '>= 18'}
+    dependencies:
+      '@cerbos/core': 0.16.0
       qs: 6.11.2
     dev: false
 
@@ -1495,6 +1502,11 @@ packages:
 
   /uuid@9.0.0:
     resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
+    hasBin: true
+    dev: false
+
+  /uuid@9.0.1:
+    resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
     hasBin: true
     dev: false
 

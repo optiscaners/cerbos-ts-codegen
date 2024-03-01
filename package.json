@@ -34,7 +34,7 @@
 	"homepage": "https://www.estino.de/",
 	"dependencies": {
 		"@cerbos/core": "^0.13.0",
-		"@cerbos/http": "^0.14.0",
+		"@cerbos/http": "^0.17.0",
 		"@inquirer/prompts": "^3.0.3",
 		"@types/json-schema": "^7.0.12",
 		"@types/node": "^20.5.1",
