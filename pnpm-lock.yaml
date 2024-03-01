@@ -1,4 +1,4 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
 
 settings:
   autoInstallPeers: true
@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@cerbos/core':
-    specifier: ^0.13.0
-    version: 0.13.0
+    specifier: ^0.16.0
+    version: 0.16.0
   '@cerbos/http':
     specifier: ^0.14.0
     version: 0.14.0
@@ -72,7 +72,14 @@ packages:
     resolution: {integrity: sha512-NOIl659hPndeHo3vP3WdBOLuZW0GOwkO7e6p9ym3sN72RyYpVCGX3XH3VZEszhoj23tLtMLtq5hOZ8viAaXwcA==}
     engines: {node: '>= 16'}
     dependencies:
-      uuid: 9.0.0
+      uuid: 9.0.1
+    dev: false
+
+  /@cerbos/core@0.16.0:
+    resolution: {integrity: sha512-5wcfWXhsEyRUyj/MfJg+pvclSQpS6Ei3V6Qf8/FD4wlQLciQkzsTXG3e55MmXayx8nPhYe/8yU598Cm5VavbBQ==}
+    engines: {node: '>= 18'}
+    dependencies:
+      uuid: 9.0.1
     dev: false
 
   /@cerbos/http@0.14.0:
@@ -1493,8 +1500,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /uuid@9.0.0:
-    resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
+  /uuid@9.0.1:
+    resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
     hasBin: true
     dev: false
 
