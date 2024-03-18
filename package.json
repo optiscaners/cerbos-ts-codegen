@@ -8,7 +8,7 @@
 		"codegen",
 		"typescript"
 	],
-	"packageManager": "pnpm@8.6.0",
+	"packageManager": "pnpm@8.15.5",
 	"repository": "github:optiscaners/cerbos-ts-codegen",
 	"type": "module",
 	"main": "dist/index.js",
