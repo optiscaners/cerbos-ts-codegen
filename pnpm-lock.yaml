@@ -1,4 +1,4 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
 
 settings:
   autoInstallPeers: true
@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@cerbos/core':
-    specifier: ^0.13.0
-    version: 0.13.0
+    specifier: ^0.33.0
+    version: 0.33.0(@bufbuild/protobuf@2.14.0)
   '@cerbos/http':
     specifier: ^0.14.0
     version: 0.14.0
@@ -68,11 +68,33 @@ packages:
       js-yaml: 4.1.0
     dev: false
 
+  /@bufbuild/protobuf@2.14.0:
+    resolution: {integrity: sha512-C3UGsiCwSprE2NKIIFA3hCDlpXTMCAXRZuEVp88L1GY36Y41+rYL5fryE+nOFhp4p4JPQvdV8PQ4DWgHgeTE+w==}
+    dev: false
+
+  /@cerbos/api@0.11.0:
+    resolution: {integrity: sha512-Wk9SrcwI75tWFxk065y95+4gFQKCUD7yd0q+OYbW2we9APeBWkJd0voFh2RbPvk4QR23Sz9ozowsZd4Vwtf90Q==}
+    engines: {node: '>= 22'}
+    dependencies:
+      '@bufbuild/protobuf': 2.14.0
+    dev: false
+
   /@cerbos/core@0.13.0:
     resolution: {integrity: sha512-NOIl659hPndeHo3vP3WdBOLuZW0GOwkO7e6p9ym3sN72RyYpVCGX3XH3VZEszhoj23tLtMLtq5hOZ8viAaXwcA==}
     engines: {node: '>= 16'}
     dependencies:
       uuid: 9.0.0
+    dev: false
+
+  /@cerbos/core@0.33.0(@bufbuild/protobuf@2.14.0):
+    resolution: {integrity: sha512-cf7oZlbLY2+p9pkDgpZycv1xZ8ZmPI5pJJgcm0ct4uCut3m1EzRWSBIfkRBIhEKhL3apPuSVQzevH4Pis0f7Sg==}
+    engines: {node: '>= 22'}
+    peerDependencies:
+      '@bufbuild/protobuf': ^2.13.0
+    dependencies:
+      '@bufbuild/protobuf': 2.14.0
+      '@cerbos/api': 0.11.0
+      uuid: 14.0.2
     dev: false
 
   /@cerbos/http@0.14.0:
@@ -1492,6 +1514,11 @@ packages:
     resolution: {integrity: sha512-zaWCozRZ6DLEWAWFrVDz1H6FVXzUSfTy5FUMWsQlU8Ym5JP9eO4xkTIROFCQvhQf61z6O/G6ugw3SgAnvvm+HA==}
     engines: {node: '>=14.17'}
     hasBin: true
+
+  /uuid@14.0.2:
+    resolution: {integrity: sha512-xZe/16rV4aa+HGSOCiY2YeLT1OybRLrrkL/Rqaq7p7GMVXjFh+6wN4oMYgjFmnSnhY8t6Xpdl2l9qmnHYuMHwQ==}
+    hasBin: true
+    dev: false
 
   /uuid@9.0.0:
     resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
